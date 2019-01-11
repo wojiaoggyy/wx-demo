@@ -1,0 +1,23 @@
+<!--index.wxml-->
+<view class="container">
+  <view class='btnOut'>
+    <button bindtap="chooseImg">上传图片</button>
+  </view>
+  <view class='imgView'>
+    <image
+      style="width: 150px; height: 150px; background-color: #eeeeee;"
+      mode="aspectFit"
+      src="{{imgSrc}}"
+      bindload="imgLoad"
+    ></image>
+  </view>
+  <view class='lvjingOut'>
+    <picker bindchange="bindLvjingChange" range="{{lvjingArr}}" range-key="name" value='lvjingSele'>
+      <view class="picker">选择滤镜：{{lvjingArr[lvjingSele].name}}</view>
+    </picker>
+  </view>
+  <view class='canvasView'>
+    <canvas canvas-id="firstCanvas" id='firstCanvas'></canvas>
+  </view>
+  
+</view>
