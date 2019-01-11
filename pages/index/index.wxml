@@ -1,7 +1,11 @@
 <!--index.wxml-->
 <view class="container">
   <view class='btnOut'>
-    <button bindtap="chooseImg">上传图片</button>
+    <button bindtap="chooseImg" class='picker'>①上传</button>
+    <picker bindchange="bindLvjingChange" range="{{lvjingArr}}" range-key="name" value='lvjingSele' class="picker {{disBtn}}" disabled="{{disBtn}}">
+      <view>②选滤镜：{{lvjingArr[lvjingSele].name}} ▼</view>
+    </picker>
+    <button bindtap="saveImg" class='picker {{disBtn}}' disabled="{{disBtn}}">③下载</button>
   </view>
   <view class='imgView'>
     <image
@@ -9,15 +13,14 @@
       mode="aspectFit"
       src="{{imgSrc}}"
       bindload="imgLoad"
+      bindtap="imgViewShow"
     ></image>
   </view>
-  <view class='lvjingOut'>
-    <picker bindchange="bindLvjingChange" range="{{lvjingArr}}" range-key="name" value='lvjingSele'>
-      <view class="picker">选择滤镜：{{lvjingArr[lvjingSele].name}}</view>
-    </picker>
-  </view>
+  <view class='hr'></view>
   <view class='canvasView'>
-    <canvas canvas-id="firstCanvas" id='firstCanvas'></canvas>
+    <canvas canvas-id="canvas" id='canvas' style='width: {{canvasWidth}}px; height: {{canvasHeight}}px'></canvas>
   </view>
-  
+  <cover-view class='waiting' style='display: {{waitingShow}}'>
+    <cover-view class='waitingIn'>waiting...</cover-view>
+  </cover-view> 
 </view>

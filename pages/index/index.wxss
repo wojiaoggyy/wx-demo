@@ -1,18 +1,55 @@
 /**index.wxss**/
 .btnOut{
-  text-align: center;
+  width: 100%;
+  display: inline-flex;
+  justify-content: space-between;
+}
+.picker{
+  flex: 0 1 auto;
+  margin: 0 20rpx;
+  display: block;
+  font-size: 30rpx;
+  line-height: 1.5;
+  background-color: #337ab7;
+  border: 2rpx solid #2e6da4;
+  color: #fff;
+  padding: 4rpx 12rpx;
+  box-sizing: border-box;
+  border-radius: 8rpx;
+}
+.picker.true{
+  background-color: #f7f7f7;
+  border: 2rpx solid #eee;
+  color: #999;
 }
 .imgView{
   text-align: center;
-  margin: 20px 0;
+  margin: 10px 0;
 }
-.lvjingOut{
-  margin: 20px 0;
+.hr{
+  height: 2rpx;
+  background-color: #eee;
+  margin: 10px 0;
 }
 .canvasView canvas{
   box-sizing: border-box;
-  width: 98%;
-  margin: 0 1%;
+  width: 100%;
   border: 4rpx solid red;
   background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAIAAAABc2X6AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QTUwQkU3RUY0M0I4MTFFODk3QzVDNDZBMDZBQ0VCOTEiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QTUwQkU3RjA0M0I4MTFFODk3QzVDNDZBMDZBQ0VCOTEiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpBNTBCRTdFRDQzQjgxMUU4OTdDNUM0NkEwNkFDRUI5MSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpBNTBCRTdFRTQzQjgxMUU4OTdDNUM0NkEwNkFDRUI5MSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PmmsCdAAAAB4SURBVHja7NHBDQAwCAOx0sWByekYPOpbILISVXU2ysyV3Xs+CxgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBh4u5iZleHu9jAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAw8A89AQYA0h4IHGip57IAAAAASUVORK5CYII=") repeat;
+}
+.waiting{
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,.5);
+  color: #fff;
+  font-size: 80rpx;
+}
+.waitingIn{
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -50%);
 }

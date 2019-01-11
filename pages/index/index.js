@@ -60,42 +60,80 @@ Page({
     ctx: {},
     canvasData: [],
     canvasData_old: [],
+    canvasSrc: '',
     len: 0,
     originalWidth: 0,
-    originalHeight: 0
+    originalHeight: 0,
+    waitingShow: 'none',
+    disBtn: true
   },
+
   //事件处理函数
   chooseImg(e){
-    let that = this
+    let that = this;
     wx.chooseImage({
       count: 1,
       sizeType: ['original'],
       success(res){
         that.setData({
+          waitingShow: 'block',
           imgSrc: res.tempFilePaths[0]
-        })
+        });
       }
-    })
+    });
   },
-  imgLoad(e){
-    let that = this
+  imgLoad(e) {
+    let that = this;
+    let ctx = wx.createCanvasContext('canvas');
+    
+    let url = this.data.imgSrc;
+
+    let w = e.detail.width;
+    let h = e.detail.height;
+    let whL = w/h;
+
+    let cW = this.data.canvasWidth;
+    let cH = cW/whL;
+
     this.setData({
-      originalWidth: e.detail.width,
-      originalHeight: e.detail.height,
-    })
-    let ctx = wx.createCanvasContext('2d')
-    ctx.drawImage(that.data.imgSrc, 0, 0, 600, 763)
-    ctx.draw()
+      originalWidth: w,
+      originalHeight: h,
+      canvasHeight: cH
+    });
+    ctx.drawImage(url, 0, 0, w, h, 0, 0, cW, cH);
+    ctx.draw(false,function(){
+      setTimeout(function(){
+        wx.canvasToTempFilePath({
+          canvasId: 'canvas',
+          x: 0,
+          y: 0,
+          width: cW,
+          height: cH,
+          destWidth: w,
+          destHeight: h,
+          success(res) {
+            that.setData({
+              canvasSrc: res.tempFilePath,
+              disBtn: false,
+              waitingShow: 'none'
+            })
+          }
+        });
+      },100);
+    });
   },
-  bindLvjingChange(e){
-    console.log(this)
+  bindLvjingChange(e){ 
     this.setData({
       lvjingSele: e.detail.value
-    })
+    });
   },
-  //canvas相关方法__开始
-  onReady(e){
-    let that = this
+  imgViewShow(e){
+    wx.previewImage({
+      urls: [this.data.imgSrc,this.data.canvasSrc],
+      current: this.data.imgSrc
+    });
+  },
+  saveImg(e){
     
   },
 
@@ -105,6 +143,17 @@ Page({
 
 
 
+
+  //第一次渲染完成
+  onReady(e){
+    let that = this
+    let query = wx.createSelectorQuery()
+    query.select("#canvas").boundingClientRect(function(res){
+      that.setData({
+        canvasWidth: res.width
+      })
+    }).exec()
+  },
   onLoad: function () {
     // if (app.globalData.userInfo) {
     //   this.setData({
