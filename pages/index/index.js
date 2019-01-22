@@ -1,6 +1,8 @@
 //index.js
 //获取应用实例
 const app = getApp()
+//引入滤镜对象
+import Filter from '../../utils/Filter.js'
 
 Page({
   data: {
@@ -15,7 +17,7 @@ Page({
         value: 'duizhe01'
       }, {
         name: '对折2',
-        value: 'duizhe01'
+        value: 'duizhe02'
       }, {
         name: '镜像反转',
         value: 'mirror'
@@ -52,20 +54,14 @@ Page({
       }, {
         name: '小方格',
         value: 'fangge'
-      }, {
-        name: '水印',
-        value: 'shuiyin'
-      }
-    ],
-    ctx: {},
-    canvasData: [],
-    canvasData_old: [],
-    canvasSrc: '',
-    len: 0,
+      },
+    ], 
+    canvasSrc: '', 
     originalWidth: 0,
     originalHeight: 0,
     waitingShow: 'none',
-    disBtn: true
+    disBtn: true,
+    infoShow: 'none'
   },
 
   //事件处理函数
@@ -93,39 +89,84 @@ Page({
     let whL = w/h;
 
     let cW = this.data.canvasWidth;
-    let cH = cW/whL;
+    let cH = Math.ceil(cW/whL);
 
     this.setData({
+      lvjingSele: 0,
       originalWidth: w,
       originalHeight: h,
       canvasHeight: cH
     });
-    ctx.drawImage(url, 0, 0, w, h, 0, 0, cW, cH);
+    // ctx.drawImage(url, 0, 0, w, h, 0, 0, cW, cH);
+    ctx.drawImage(url, 0, 0, cW, cH);
     ctx.draw(false,function(){
-      setTimeout(function(){
-        wx.canvasToTempFilePath({
-          canvasId: 'canvas',
-          x: 0,
-          y: 0,
-          width: cW,
-          height: cH,
-          destWidth: w,
-          destHeight: h,
-          success(res) {
-            that.setData({
-              canvasSrc: res.tempFilePath,
-              disBtn: false,
-              waitingShow: 'none'
-            })
-          }
-        });
-      },100);
+      wx.canvasGetImageData({
+        canvasId: 'canvas',
+        x: 0,
+        y: 0,
+        width: cW,
+        height: cH,
+        success(res){
+          console.log(res)
+          let resString = JSON.stringify(res)
+          let resObj = JSON.parse(resString)
+          Filter.len = res.data.length;
+          Filter.imgData = res;
+          Filter.imgData_old = resObj;
+          that.setData({
+            disBtn: false,
+            waitingShow: 'none'
+          })
+        } 
+      })
     });
   },
-  bindLvjingChange(e){ 
+  bindLvjingChange(e){
+    let that = this
+    let i = e.detail.value
     this.setData({
-      lvjingSele: e.detail.value
+      lvjingSele: i
     });
+    that.setData({
+      disBtn: true,
+      waitingShow: 'block'
+    })
+    Filter.drawFun(function(){})
+    let filterName = this.data.lvjingArr[i].value + 'Fun';
+    Filter[filterName](function(){
+      console.log(Filter)
+      let data = Filter.imgData.data;
+      let w = Filter.imgData.width;
+      let h = Filter.imgData.height;
+      wx.canvasPutImageData({
+        canvasId: 'canvas',
+        data: data,
+        x: 0,
+        y: 0,
+        width: w,
+        height: h,
+        fail(ress){console.log("失败")},
+        success(ress){
+          console.log("成功")
+          wx.canvasToTempFilePath({
+            canvasId: 'canvas',
+            x: 0,
+            y: 0,
+            width: that.data.canvasWidth,
+            height: that.data.canvasHeight,
+            destWidth: that.data.originalWidth,
+            destHeight: that.data.originalHeight,
+            success(res) {
+              that.setData({
+                canvasSrc: res.tempFilePath,
+                disBtn: false,
+                waitingShow: 'none'
+              })
+            }
+          });
+        }
+      });
+    })    
   },
   imgViewShow(e){
     wx.previewImage({
@@ -134,52 +175,35 @@ Page({
     });
   },
   saveImg(e){
-    
+    let that = this
+    wx.saveImageToPhotosAlbum({
+      filePath: that.data.canvasSrc,
+      success(res) {
+        that.setData({
+          infoShow: 'block'
+        })
+        setTimeout(function(){
+          that.setData({
+            infoShow: 'none'
+          })
+        },2000)
+      }
+    })
   },
 
 
-
-
-
-
-
-
-  //第一次渲染完成
-  onReady(e){
+  //第一次渲染完成 
+  onReady(e){ 
     let that = this
     let query = wx.createSelectorQuery()
     query.select("#canvas").boundingClientRect(function(res){
+      console.log(res)
       that.setData({
         canvasWidth: res.width
       })
     }).exec()
   },
   onLoad: function () {
-    // if (app.globalData.userInfo) {
-    //   this.setData({
-    //     userInfo: app.globalData.userInfo,
-    //     hasUserInfo: true
-    //   })
-    // } else if (this.data.canIUse){
-    //   // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-    //   // 所以此处加入 callback 以防止这种情况
-    //   app.userInfoReadyCallback = res => {
-    //     this.setData({
-    //       userInfo: res.userInfo,
-    //       hasUserInfo: true
-    //     })
-    //   }
-    // } else {
-    //   // 在没有 open-type=getUserInfo 版本的兼容处理
-    //   wx.getUserInfo({
-    //     success: res => {
-    //       app.globalData.userInfo = res.userInfo
-    //       this.setData({
-    //         userInfo: res.userInfo,
-    //         hasUserInfo: true
-    //       })
-    //     }
-    //   })
-    // }
+
   },
 })

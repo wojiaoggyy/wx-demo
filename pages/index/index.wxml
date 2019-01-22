@@ -23,4 +23,7 @@
   <cover-view class='waiting' style='display: {{waitingShow}}'>
     <cover-view class='waitingIn'>waiting...</cover-view>
   </cover-view> 
+  <cover-view class='info' style='display: {{infoShow}}'>
+    保存成功!
+  </cover-view> 
 </view>
