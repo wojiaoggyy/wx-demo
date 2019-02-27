@@ -2,8 +2,15 @@
 <view class="container">
   <view class='btnOut'>
     <button bindtap="chooseImg" class='picker'>①上传</button>
-    <picker bindchange="bindLvjingChange" range="{{lvjingArr}}" range-key="name" value='lvjingSele' class="picker {{disBtn}}" disabled="{{disBtn}}">
-      <view>②选滤镜：{{lvjingArr[lvjingSele].name}} ▼</view>
+    <picker 
+      bindchange="bindLvjingChange" 
+      mode="selector" 
+      range="{{lvjingArr}}" 
+      range-key="name" 
+      value='lvjingSele' 
+      class="picker {{disBtn}}" 
+      disabled="{{disBtn}}">
+        <view>②选滤镜：{{lvjingArr[lvjingSele].name}} ▼</view>
     </picker>
     <button bindtap="saveImg" class='picker {{disBtn}}' disabled="{{disBtn}}">③下载</button>
   </view>
