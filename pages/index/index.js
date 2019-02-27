@@ -73,7 +73,8 @@ Page({
       success(res){
         that.setData({
           waitingShow: 'block',
-          imgSrc: res.tempFilePaths[0]
+          imgSrc: res.tempFilePaths[0],
+          lvjingSele: 0
         });
       }
     });
